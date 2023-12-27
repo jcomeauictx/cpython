@@ -678,8 +678,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if f:
             try:
                 self.copyfile(f, self.wfile)
+            except Exception as error:
+                self.log_message('Error encountered in copyfile: %s', error)
             finally:
                 f.close()
+        else:
+            self.log_message('do_GET: invalid f value %s', f)
 
     def do_HEAD(self):
         """Serve a HEAD request."""
@@ -735,6 +739,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return None
 
         try:
+            self.log_message('%s successfully opened, checking os.fstat(%d)',
+                             path, f.fileno())
             fs = os.fstat(f.fileno())
             # Use browser cache if possible
             if ("If-Modified-Since" in self.headers
@@ -770,8 +776,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_header("Last-Modified",
                 self.date_time_string(fs.st_mtime))
             self.end_headers()
+            self.log_message('self.send_head() complete')
             return f
-        except:
+        except Exception as error:
+            self.log_message('Unexpected failure during os.fstat: %s', error)
             f.close()
             raise
 
