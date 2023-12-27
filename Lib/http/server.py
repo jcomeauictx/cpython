@@ -456,6 +456,7 @@ class BaseHTTPRequestHandler(socketserver.StreamRequestHandler):
 
         """
 
+        self.log_message('send_error called with code %d', code)
         try:
             shortmsg, longmsg = self.responses[code]
         except KeyError:
