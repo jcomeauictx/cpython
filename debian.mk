@@ -1,7 +1,7 @@
 PREFIX ?= /usr/local
 all: dependencies python
 python: Makefile
-	$(MAKE) -f $<
+	$(MAKE) -f $< -j
 Makefile: configure
 	./$< --prefix=$(PREFIX)
 dependencies:
