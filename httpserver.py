@@ -1,4 +1,4 @@
-#!/usr/local/python3.13/bin/python3
+#!/usr/local/jcpython/bin/python3
 import http.server
 del http.server.__all__  # otherwise the following will only get classes
 from http.server import *

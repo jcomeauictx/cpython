@@ -1,4 +1,4 @@
-PREFIX ?= /usr/local
+PREFIX ?= /usr/local/jcpython
 all: dependencies python
 python: Makefile
 	$(MAKE) -f $< -j
