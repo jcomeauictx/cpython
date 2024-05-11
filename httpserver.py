@@ -3,8 +3,6 @@ import http.server
 del http.server.__all__  # otherwise the following will only get classes
 from http.server import *
 from http.server import test as original_test
-del BaseHTTPRequestHandler
-del SimpleHTTPRequestHandler
 
 class BaseHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     '''
