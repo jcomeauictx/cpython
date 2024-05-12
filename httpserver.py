@@ -1,6 +1,18 @@
 #!/usr/local/jcpython/bin/python3
+'''
+non-library version of my selectable default content-type HTTP server
+
+only intended for use if my pull request github.com/python/cpython/pull/113475
+is not accepted
+'''
+# pylint: disable=invalid-name, function-redefined, unused-variable
+# pylint: disable=wrong-import-position, wildcard-import, unused-wildcard-import
 import http.server
-del http.server.__all__  # otherwise the following will only get classes
+try:
+    del http.server.__all__  # otherwise wildcard imports only get classes
+except AttributeError as failed:
+    raise NotImplementedError('http library not recognized, '
+                              'are you using python3?') from failed
 from http.server import *
 from http.server import test as original_test
 
@@ -30,6 +42,7 @@ class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler,
             self.default_content_type
 
 def test(HandlerClass=BaseHTTPRequestHandler,
+         # pylint: disable=too-many-arguments
          ServerClass=ThreadingHTTPServer,
          protocol="HTTP/1.0", port=8000, bind=None,
          content_type=BaseHTTPRequestHandler.default_content_type):
@@ -71,7 +84,7 @@ if __name__ == '__main__':
 
     # ensure dual-stack is not disabled; ref #38907
     class DualStackServer(ThreadingHTTPServer):
-
+        # pylint: disable=missing-class-docstring
         def server_bind(self):
             # suppress exception when protocol is IPv4
             with contextlib.suppress(Exception):
