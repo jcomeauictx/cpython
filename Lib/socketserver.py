@@ -128,6 +128,7 @@ import selectors
 import os
 import sys
 import threading
+import logging
 from io import BufferedIOBase
 from time import monotonic as time
 
@@ -150,7 +151,6 @@ if hasattr(selectors, 'PollSelector'):
     _ServerSelector = selectors.PollSelector
 else:
     _ServerSelector = selectors.SelectSelector
-
 
 class BaseServer:
 
@@ -467,8 +467,10 @@ class TCPServer(BaseServer):
 
         """
         if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            logging.debug('socketserver allowing address reuse')
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         if self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT"):
+            logging.debug('socketserver allowing port reuse')
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         self.socket.bind(self.server_address)
         self.server_address = self.socket.getsockname()
